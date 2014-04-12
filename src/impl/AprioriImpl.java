@@ -11,37 +11,37 @@ import java.util.Set;
 
 public class AprioriImpl {
 	
-	private static final Integer MIN_SUPPORT = 2;
-	
+	private Integer minSupport;
 	private List<Set<String>> dataset;
 	//private List<List<String>> candidates;
 
-	public AprioriImpl(List<Set<String>> dataset) {
+	public AprioriImpl(List<Set<String>> dataset, Integer minSupport) {
 		this.dataset = dataset;
+		this.minSupport = minSupport;
 	}
+	
 
 	public static void main(String[] args) {
 		
-		Set<String> power = new HashSet<>(Arrays.asList("I3", "I4", "I5"));
-		for(Set<String> s : getSetsWithLenghth(powerSet(power),3)){
-			System.out.println(s);
-		}
+//		Set<String> power = new HashSet<>(Arrays.asList("I3", "I4", "I5"));
+//		for(Set<String> s : getSetsWithLenghth(powerSet(power),3)){
+//			System.out.println(s);
+//		}
 	}
 	
 	
-	public static Map<Set<String>, Integer> generateCandidates(List<Set<String>> data){
-		Map<Set<String>, Integer> result = generateCandidatesFirst(data);
+	public Map<Set<String>, Integer> generateCandidates(){
+		Map<Set<String>, Integer> result = generateCandidatesFirst(dataset);
 		Map<Set<String>, Integer> temp = result;
 		while(!result.isEmpty()){
 			System.out.println("--------------");
 			temp = result;
-			result = generateCandidatesRest(result, data);
+			result = generateCandidatesRest(result);
 		}
 		return temp;
-		
 	}
 
-	public static Map<Set<String>, Integer> generateCandidatesFirst(List<Set<String>> candidates){
+	private Map<Set<String>, Integer> generateCandidatesFirst(List<Set<String>> candidates){
 //		System.out.println("Input: "+candidates);
 		Map<Set<String>, Integer> tempCandidates = new HashMap<>();
 		for(Set<String> set : candidates){
@@ -64,9 +64,9 @@ public class AprioriImpl {
 	
 	
 	//TODO: Überprüfen, ob das auch mit Second läuft. Testen. Durchgehen und prüfen, ob das korrekt ist.
-	public static Map<Set<String>, Integer> generateCandidatesRest(Map<Set<String>, Integer> candidates, List<Set<String>> data){
+	private Map<Set<String>, Integer> generateCandidatesRest(Map<Set<String>, Integer> candidates){
 		System.out.println("candidates: "+candidates);
-		System.out.println("data: "+data);
+		System.out.println("data: "+dataset);
 		Set<Set<String>> newCandidates = new HashSet<>();
 		for(Set<String> itemset: candidates.keySet()){
 			for(Set<String> otherset: candidates.keySet()){
@@ -74,7 +74,9 @@ public class AprioriImpl {
 				Set<String> current = new HashSet<>(itemset);
 				current.addAll(otherset);
 				//System.out.println("current: "+current);
+				if(current.size() == otherset.size()+1){
 				newCandidates.add(current);
+				}
 				}
 			}
 		}
@@ -87,13 +89,13 @@ public class AprioriImpl {
 			for(Set<String> s : subsets	){
 				//Prunning
 //				if(candidates.containsKey(s)){
-					Integer support = getSupportOfSet(s, data);
+					Integer support = getSupportOfSet(s, dataset);
 					//System.out.println("support: "+support+" map: "+candidates.get(s));
-					if(support<MIN_SUPPORT) frequent = false;
+					if(support<minSupport) frequent = false;
 //				}
 			}
 			if(frequent){
-				Integer support = getSupportOfSet(cand, data);
+				Integer support = getSupportOfSet(cand, dataset);
 				tempCandidates.put(cand, support);
 			}
 			
@@ -103,12 +105,12 @@ public class AprioriImpl {
 	}
 	
 	// CHECk min support, not apriori
-	private static Map<Set<String>, Integer> checkApriori(Map<Set<String>, Integer> candidates){
+	private Map<Set<String>, Integer> checkApriori(Map<Set<String>, Integer> candidates){
 		Map<Set<String>, Integer> result = new HashMap<>();
 		for(Entry<Set<String>, Integer> e : candidates.entrySet()){
 			Set<String> candidate = e.getKey();
 			Integer support = e.getValue();
-			if(support>=MIN_SUPPORT){
+			if(support>=minSupport){
 				result.put(candidate, support);
 			}
 		}
@@ -116,7 +118,7 @@ public class AprioriImpl {
 		return result;
 	}
 	
-	public static Set<Set<String>> powerSet(Set<String> originalSet) {
+	private Set<Set<String>> powerSet(Set<String> originalSet) {
         Set<Set<String>> sets = new HashSet<>();
         if (originalSet.isEmpty()) {
             sets.add(new HashSet<String>());
@@ -135,7 +137,7 @@ public class AprioriImpl {
         return sets;
     }
 	
-	public static Set<Set<String>> getSetsWithLenghth(Set<Set<String>> sets, int length){
+	private Set<Set<String>> getSetsWithLenghth(Set<Set<String>> sets, int length){
 		Set<Set<String>> result = new HashSet<>();
 		for(Set<String> s : sets){
 			if(s.size()==length) result.add(s);
@@ -144,7 +146,7 @@ public class AprioriImpl {
 	}
 	
 	
-	public static Integer getSupportOfSet(Set<String> current, List<Set<String>> data){
+	private Integer getSupportOfSet(Set<String> current, List<Set<String>> data){
 		//Map<Set<String>, Integer> result = new HashMap<>();
 		Integer result = 0;
 		for(Set<String> dataset : data){
