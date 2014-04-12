@@ -56,7 +56,7 @@ public class AprioriTest {
 		
 		AprioriImpl apriori = new AprioriImpl(inputList, 2);
 		
-		Map<Set<String>, Integer> result = apriori.generateCandidates();
+		Map<Set<String>, Integer> result = apriori.calculateFrequentItemSets();
 		
 //		Assert.assertEquals(expectedResult, result);
 				
@@ -135,7 +135,7 @@ public class AprioriTest {
 		expectedResult.put(rset2, 2);
 		AprioriImpl apriori = new AprioriImpl(inputList, 2);
 		
-		Map<Set<String>, Integer> result = apriori.generateCandidates();
+		Map<Set<String>, Integer> result = apriori.calculateFrequentItemSets();
 		
 		Assert.assertEquals(expectedResult, result);
 	}
@@ -192,7 +192,7 @@ public class AprioriTest {
 		
 		AprioriImpl apriori = new AprioriImpl(inputList, 2);
 		
-		Map<Set<String>, Integer> result = apriori.generateCandidates();
+		Map<Set<String>, Integer> result = apriori.calculateFrequentItemSets();
 		
 //		System.out.println(result+" \n"+expectedResult);
 		
@@ -234,7 +234,7 @@ public class AprioriTest {
 		
 		AprioriImpl apriori = new AprioriImpl(inputList, 3);
 		
-		Map<Set<String>, Integer> result = apriori.generateCandidates();
+		Map<Set<String>, Integer> result = apriori.calculateFrequentItemSets();
 		
 		Assert.assertEquals(expectedResult, result);
 		
