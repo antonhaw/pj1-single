@@ -1,7 +1,6 @@
 package impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -56,8 +55,8 @@ public class AprioriImpl {
 		return checkSupport(tempCandidates);
 	}
 
-	// TODO: Überprüfen, ob das auch mit Second läuft. Testen. Durchgehen und
-	// prüfen, ob das korrekt ist.
+	// TODO: ï¿½berprï¿½fen, ob das auch mit Second lï¿½uft. Testen. Durchgehen und
+	// prï¿½fen, ob das korrekt ist.
 	private Map<Set<String>, Integer> generateCandidatesRest(
 			Map<Set<String>, Integer> candidates) {
 		System.out.println("candidates: " + candidates);
